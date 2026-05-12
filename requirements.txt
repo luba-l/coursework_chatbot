@@ -1,0 +1,10 @@
+pandas
+numpy
+scikit-learn
+pymystem3
+nltk
+matplotlib
+seaborn
+tqdm
+jupyter
+pyTelegramBotAPI
