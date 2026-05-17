@@ -14,10 +14,15 @@ warnings.filterwarnings('ignore')
 df = pd.read_csv('data/final/final_dataset.csv')
 
 vectorizer = TfidfVectorizer(min_df=2, max_df=0.95, ngram_range=(1, 2))
-X = vectorizer.fit_transform(df['text'])
-y = df['label']
+X_train_text, X_test_text, y_train, y_test = train_test_split(
+    df['text'], df['label'],
+    test_size=0.15, stratify=df['label'], random_state=42
+)
 
-X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.15, stratify=y, random_state=42)
+X_train = vectorizer.fit_transform(X_train_text)
+X_test = vectorizer.transform(X_test_text)
+X = vectorizer.transform(df['text'])
+y = df['label']
 
 lr = LogisticRegression(max_iter=1000, class_weight='balanced', random_state=42)
 lr.fit(X_train, y_train)
@@ -54,3 +59,6 @@ for name, model in models_all.items():
     results.append({'Model': name, 'Train': round(train_score, 4), 'Test': round(test_score, 4), 'CV Mean': round(scores.mean(), 4)})
 results_df = pd.DataFrame(results)
 print(results_df)
+
+results_df.to_csv('results/train_results.csv', index=False)
+print("Сохранено в results/train_results.csv")
