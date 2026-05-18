@@ -33,9 +33,10 @@ mlp = MLPClassifier(hidden_layer_sizes=(100, 50), max_iter=500, random_state=42)
 mlp.fit(X_train, y_train)
 
 le = LabelEncoder()
-y_train_enc = le.fit_transform(y_train)
+le.fit(df['label'])
+y_train_enc = le.transform(y_train)
 y_test_enc = le.transform(y_test)
-y_enc = le.fit_transform(df['label'])
+y_enc = le.transform(df['label'])
 xgb = XGBClassifier(eval_metric='mlogloss', random_state=42)
 xgb.fit(X_train, y_train_enc)
 
