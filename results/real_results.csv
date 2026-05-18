@@ -1,6 +1,6 @@
 Model,Real Accuracy
-LR,0.425
-SVC,0.475
+LR,0.45
+SVC,0.5
 NB,0.45
-MLP,0.475
+MLP,0.45
 XGB,0.0

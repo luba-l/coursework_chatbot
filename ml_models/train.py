@@ -8,21 +8,17 @@ from sklearn.neural_network import MLPClassifier
 from xgboost import XGBClassifier
 from sklearn.preprocessing import LabelEncoder
 from sklearn.metrics import balanced_accuracy_score
+from sklearn.pipeline import Pipeline
 import warnings
 warnings.filterwarnings('ignore')
 
 df = pd.read_csv('data/final/final_dataset.csv')
 
-vectorizer = TfidfVectorizer(min_df=2, max_df=0.95, ngram_range=(1, 2))
-X_train_text, X_test_text, y_train, y_test = train_test_split(
-    df['text'], df['label'],
-    test_size=0.15, stratify=df['label'], random_state=42
-)
-
+TFIDF_PARAMS = {'min_df': 2, 'max_df': 0.95, 'ngram_range': (1, 2)}
+X_train_text, X_test_text, y_train, y_test = train_test_split(df['text'], df['label'], test_size=0.15, stratify=df['label'], random_state=42)
+vectorizer = TfidfVectorizer(**TFIDF_PARAMS)
 X_train = vectorizer.fit_transform(X_train_text)
 X_test = vectorizer.transform(X_test_text)
-X = vectorizer.transform(df['text'])
-y = df['label']
 
 lr = LogisticRegression(max_iter=1000, class_weight='balanced', random_state=42)
 lr.fit(X_train, y_train)
@@ -37,28 +33,36 @@ mlp = MLPClassifier(hidden_layer_sizes=(100, 50), max_iter=500, random_state=42)
 mlp.fit(X_train, y_train)
 
 le = LabelEncoder()
-y_enc = le.fit_transform(y)
 y_train_enc = le.fit_transform(y_train)
 y_test_enc = le.transform(y_test)
-
+y_enc = le.fit_transform(df['label'])
 xgb = XGBClassifier(eval_metric='mlogloss', random_state=42)
 xgb.fit(X_train, y_train_enc)
 
 skf = StratifiedKFold(n_splits=5, shuffle=True, random_state=42)
-models_all = {"LR": lr, "SVC": svc, "NB": nb, "MLP": mlp, "XGB": xgb}
 results = []
-for name, model in models_all.items():
-    if name == "XGB":
-        train_score = balanced_accuracy_score(y_train_enc, model.predict(X_train))
-        test_score = balanced_accuracy_score(y_test_enc, model.predict(X_test))
-        scores = cross_val_score(model, X, y_enc, cv=skf, scoring='balanced_accuracy')
+models = {
+    'LR': (lr, LogisticRegression(max_iter=1000, class_weight='balanced', random_state=42)),
+    'SVC': (svc, LinearSVC(class_weight='balanced', max_iter=2000, random_state=42)),
+    'NB': (nb, MultinomialNB(alpha=0.1)),
+    'MLP': (mlp, MLPClassifier(hidden_layer_sizes=(100, 50), max_iter=500, random_state=42)),
+    'XGB': (xgb, XGBClassifier(eval_metric='mlogloss', random_state=42))
+}
+for name, (trained_model, clean_model) in models.items():
+    pipeline = Pipeline([
+        ('tfidf', TfidfVectorizer(**TFIDF_PARAMS)),
+        ('clf', clean_model)
+    ])
+    if name == 'XGB':
+        scores = cross_val_score(pipeline, df['text'], y_enc, cv=skf, scoring='balanced_accuracy')
+        train_score = balanced_accuracy_score(y_train_enc, trained_model.predict(X_train))
+        test_score = balanced_accuracy_score(y_test_enc, trained_model.predict(X_test))
     else:
-        train_score = balanced_accuracy_score(y_train, model.predict(X_train))
-        test_score = balanced_accuracy_score(y_test, model.predict(X_test))
-        scores = cross_val_score(model, X, y, cv=skf, scoring='balanced_accuracy')
+        scores = cross_val_score(pipeline, df['text'], df['label'], cv=skf, scoring='balanced_accuracy')
+        train_score = balanced_accuracy_score(y_train, trained_model.predict(X_train))
+        test_score = balanced_accuracy_score(y_test, trained_model.predict(X_test))
     results.append({'Model': name, 'Train': round(train_score, 4), 'Test': round(test_score, 4), 'CV Mean': round(scores.mean(), 4)})
 results_df = pd.DataFrame(results)
 print(results_df)
-
 results_df.to_csv('results/train_results.csv', index=False)
 print("Сохранено в results/train_results.csv")
