@@ -16,7 +16,7 @@ final.to_csv('results/final_results.csv', index=False)
 print(final.to_string(index=False))
 
 best = final.sort_values(
-    ['CV Mean', 'Test', 'Real Accuracy'],
+    ['CV Mean', 'Test BA', 'Real Accuracy'],
     ascending=False
 ).iloc[0]
 

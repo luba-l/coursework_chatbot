@@ -7,7 +7,7 @@ from sklearn.naive_bayes import MultinomialNB
 from sklearn.neural_network import MLPClassifier
 from xgboost import XGBClassifier
 from sklearn.preprocessing import LabelEncoder
-from sklearn.metrics import balanced_accuracy_score
+from sklearn.metrics import balanced_accuracy_score, precision_recall_fscore_support
 from sklearn.pipeline import Pipeline
 import warnings
 warnings.filterwarnings('ignore')
@@ -58,11 +58,21 @@ for name, (trained_model, clean_model) in models.items():
         scores = cross_val_score(pipeline, df['text'], y_enc, cv=skf, scoring='balanced_accuracy')
         train_score = balanced_accuracy_score(y_train_enc, trained_model.predict(X_train))
         test_score = balanced_accuracy_score(y_test_enc, trained_model.predict(X_test))
+        precision, recall, f1, _ = precision_recall_fscore_support(y_test_enc, trained_model.predict(X_test), average='macro', zero_division=0)
     else:
         scores = cross_val_score(pipeline, df['text'], df['label'], cv=skf, scoring='balanced_accuracy')
         train_score = balanced_accuracy_score(y_train, trained_model.predict(X_train))
         test_score = balanced_accuracy_score(y_test, trained_model.predict(X_test))
-    results.append({'Model': name, 'Train': round(train_score, 4), 'Test': round(test_score, 4), 'CV Mean': round(scores.mean(), 4)})
+        precision, recall, f1, _ = precision_recall_fscore_support(y_test, trained_model.predict(X_test), average='macro', zero_division=0)
+    results.append({
+        'Model': name,
+        'Train BA': round(train_score, 4),
+        'Test BA': round(test_score, 4),
+        'CV Mean': round(scores.mean(), 4),
+        'Precision': round(precision, 4),
+        'Recall': round(recall, 4),
+        'F1-score': round(f1, 4)
+    })
 results_df = pd.DataFrame(results)
 print(results_df)
 results_df.to_csv('results/train_results.csv', index=False)
