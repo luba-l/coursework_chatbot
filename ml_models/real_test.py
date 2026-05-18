@@ -38,6 +38,8 @@ df_real = pd.read_csv('data/live_examples/real_cases.csv')
 
 le = LabelEncoder()
 y_train_enc = le.fit_transform(df['label'])
+le_real = LabelEncoder()
+le_real.fit(df['label'])
 X_vec = vectorizer.transform(df['text'])
 
 models = {
@@ -62,6 +64,8 @@ for name, model in models.items():
         text = lemmatize_text(clean_text(row['text']))
         X_input = vectorizer.transform([text])
         pred = model.predict(X_input)[0]
+        if name == "XGB":
+            pred = le_real.inverse_transform([pred])[0]
         if pred == row['label']:
             correct += 1
     acc = round(correct / len(df_real), 4)
