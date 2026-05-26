@@ -17,9 +17,7 @@ print(f"Diagnozes: {len(df_diag)} строк")
 df_combined = pd.concat([df_symptom, df_diag], ignore_index=True)
 sample_texts = df_combined['text'].dropna().tolist()[:200]
 
-print(
-    f"\n Тестовая выборка: {
-        len(sample_texts)} текстов (из Symptom2Disease + Diagnozes)")
+print(f"\n Тестовая выборка: {len(sample_texts)} текстов (из Symptom2Disease + Diagnozes)")
 
 try:
     from pymystem3 import Mystem

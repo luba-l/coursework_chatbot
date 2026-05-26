@@ -25,12 +25,7 @@ axes[0].hist(lengths, bins=30, edgecolor='black', color='skyblue')
 axes[0].set_xlabel('Длина текста (символы)')
 axes[0].set_ylabel('Частота')
 axes[0].set_title('Финальный датасет - Гистограмма')
-axes[0].axvline(
-    lengths.mean(),
-    color='red',
-    linestyle='--',
-    label=f'Средняя: {
-        lengths.mean():.0f}')
+axes[0].axvline(lengths.mean(), color='red', linestyle='--', label=f'Средняя: {lengths.mean():.0f}')
 axes[0].legend()
 
 axes[1].boxplot(lengths, vert=False)
