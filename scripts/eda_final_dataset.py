@@ -25,7 +25,12 @@ axes[0].hist(lengths, bins=30, edgecolor='black', color='skyblue')
 axes[0].set_xlabel('Длина текста (символы)')
 axes[0].set_ylabel('Частота')
 axes[0].set_title('Финальный датасет - Гистограмма')
-axes[0].axvline(lengths.mean(), color='red', linestyle='--', label=f'Средняя: {lengths.mean():.0f}')
+axes[0].axvline(
+    lengths.mean(),
+    color='red',
+    linestyle='--',
+    label=f'Средняя: {
+        lengths.mean():.0f}')
 axes[0].legend()
 
 axes[1].boxplot(lengths, vert=False)
@@ -50,9 +55,15 @@ plt.tight_layout()
 plt.savefig('results/figures/final_dataset_top_diagnoses.png', dpi=150)
 plt.close()
 
-top_labels.to_csv('results/tables/final_dataset_top_diagnoses.csv', encoding='utf-8-sig')
-print(f"   Самый частый диагноз: {top_labels.index[0]} ({top_labels.iloc[0]} раз)")
-print(f"   Топ-5: {', '.join([f'{top_labels.index[i]} ({top_labels.iloc[i]})' for i in range(min(5, len(top_labels)))])}")
+top_labels.to_csv(
+    'results/tables/final_dataset_top_diagnoses.csv',
+    encoding='utf-8-sig')
+print(
+    f"   Самый частый диагноз: {
+        top_labels.index[0]} ({
+            top_labels.iloc[0]} раз)")
+print(
+    f"   Топ-5: {', '.join([f'{top_labels.index[i]} ({top_labels.iloc[i]})' for i in range(min(5, len(top_labels)))])}")
 
 print("\n3. Генерация облака слов")
 all_text = ' '.join(df['text'].fillna('').astype(str))
@@ -92,7 +103,7 @@ plt.close()
 
 print("   Топ-5 слов:")
 for i, (word, count) in enumerate(top_words[:5]):
-    print(f"     {i+1}. '{word}' — {count} раз")
+    print(f"     {i + 1}. '{word}' — {count} раз")
 
 stats = pd.DataFrame({
     'Показатель': [
@@ -114,4 +125,5 @@ stats = pd.DataFrame({
         round(lengths.std(), 1)
     ]
 })
-stats.to_csv('results/tables/final_dataset_stats.csv', index=False, encoding='utf-8-sig')
+stats.to_csv('results/tables/final_dataset_stats.csv',
+             index=False, encoding='utf-8-sig')

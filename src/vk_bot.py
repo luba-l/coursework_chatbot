@@ -218,13 +218,14 @@ recommendations = {
         "Местные глюкокортикоиды по назначению дерматолога"
     ],
     "язвенная болезнь": [
-    "Исключить острое, жирное, жареное, копчёное, кислое",
-    "Дробное питание 5–6 раз в день малыми порциями (не более 250 г за приём)",
-    "Контрольная ФГДС через 4–6 недель для оценки заживления",
-    "Избегать стрессов — они провоцируют обострение"
+        "Исключить острое, жирное, жареное, копчёное, кислое",
+        "Дробное питание 5–6 раз в день малыми порциями (не более 250 г за приём)",
+        "Контрольная ФГДС через 4–6 недель для оценки заживления",
+        "Избегать стрессов — они провоцируют обострение"
     ]
 
 }
+
 
 def get_main_keyboard():
     keyboard = VkKeyboard(one_time=True)
@@ -238,6 +239,7 @@ def get_main_keyboard():
     )
     return keyboard.get_keyboard()
 
+
 def send_message(user_id, text, keyboard=None):
     vk.messages.send(
         user_id=user_id,
@@ -245,6 +247,7 @@ def send_message(user_id, text, keyboard=None):
         random_id=random.randint(1, 2**31),
         keyboard=keyboard
     )
+
 
 def clean_text(text):
     """Очистка текста от шума"""
@@ -255,6 +258,7 @@ def clean_text(text):
     text = re.sub(r'\s+', ' ', text).strip()
     return text
 
+
 def lemmatize_text(text):
     """Лемматизация текста с помощью spaCy"""
     if not isinstance(text, str) or not text:
@@ -262,8 +266,9 @@ def lemmatize_text(text):
     try:
         doc = nlp(text)
         return ' '.join([token.lemma_ for token in doc if not token.is_punct])
-    except:
+    except BaseException:
         return text
+
 
 def predict_top3(text):
     cleaned = clean_text(text)
@@ -274,6 +279,7 @@ def predict_top3(text):
     pairs = list(zip(classes, decision))
     pairs.sort(key=lambda x: x[1], reverse=True)
     return pairs[:3]
+
 
 for event in longpoll.listen():
     if event.type == VkEventType.MESSAGE_NEW and event.to_me:

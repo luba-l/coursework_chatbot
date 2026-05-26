@@ -28,14 +28,22 @@ vectorizer = TfidfVectorizer(min_df=2, max_df=0.95, ngram_range=(1, 2))
 X = vectorizer.fit_transform(df['text'])
 y = df['label']
 
-if best_name == "LR": 
-    model = LogisticRegression( max_iter=1000, class_weight='balanced', random_state=42)
+if best_name == "LR":
+    model = LogisticRegression(
+        max_iter=1000,
+        class_weight='balanced',
+        random_state=42)
 elif best_name == "SVC":
     model = LinearSVC(class_weight='balanced', max_iter=2000, random_state=42)
 elif best_name == "NB":
     model = MultinomialNB(alpha=0.1)
 elif best_name == "MLP":
-    model = MLPClassifier(hidden_layer_sizes=(100, 50), max_iter=500, random_state=42)
+    model = MLPClassifier(
+        hidden_layer_sizes=(
+            100,
+            50),
+        max_iter=500,
+        random_state=42)
 elif best_name == "XGB":
     le = LabelEncoder()
     y = le.fit_transform(y)

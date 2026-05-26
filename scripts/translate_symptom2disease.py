@@ -1,3 +1,4 @@
+from deep_translator import GoogleTranslator
 import pandas as pd
 from tqdm import tqdm
 
@@ -8,16 +9,17 @@ if 'Unnamed: 0' in df.columns:
 print(f"Колонки: {df.columns.tolist()}")
 print(f"Всего строк: {len(df)}")
 
-from deep_translator import GoogleTranslator
 translator = GoogleTranslator(source='en', target='ru')
+
 
 def translate_text(text):
     if not isinstance(text, str):
         return text
     try:
         return translator.translate(text)
-    except:
+    except BaseException:
         return text
+
 
 print("\n Перевод симптомов")
 tqdm.pandas(desc="Симптомы")
@@ -31,6 +33,10 @@ df_final = pd.DataFrame({
     'text': df['symptom_ru'],
     'label': df['label_ru']
 })
-df_final.to_csv('data/raw/symptom2disease_translated_full.csv', index=False, encoding='utf-8-sig')
+df_final.to_csv(
+    'data/raw/symptom2disease_translated_full.csv',
+    index=False,
+    encoding='utf-8-sig')
 print(f"\n Сохранено {len(df_final)} строк")
-print(f"Пример: {df_final['text'].iloc[0][:100]}... → {df_final['label'].iloc[0]}")
+print(
+    f"Пример: {df_final['text'].iloc[0][:100]}... → {df_final['label'].iloc[0]}")
