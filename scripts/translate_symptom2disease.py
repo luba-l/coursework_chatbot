@@ -38,5 +38,4 @@ df_final.to_csv(
     index=False,
     encoding='utf-8-sig')
 print(f"\n Сохранено {len(df_final)} строк")
-print(
-    f"Пример: {df_final['text'].iloc[0][:100]}... → {df_final['label'].iloc[0]}")
+print(f"Пример: {df_final['text'].iloc[0][:100]}... → {df_final['label'].iloc[0]}")

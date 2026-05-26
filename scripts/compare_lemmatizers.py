@@ -103,10 +103,7 @@ if results:
     print(df_results.to_string(index=False))
 
     fastest = df_results.loc[df_results['Скорость (текстов/сек)'].idxmax()]
-    print(
-        f"\n Самый быстрый: {
-            fastest['Лемматизатор']} ({
-            fastest['Скорость (текстов/сек)']} текстов/сек)")
+    print(f"\n Самый быстрый: {fastest['Лемматизатор']} ({fastest['Скорость (текстов/сек)']} текстов/сек)")
 
 else:
     print("\n Нет доступных лемматизаторов. Установите pymystem3 или spaCy.")

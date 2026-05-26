@@ -53,12 +53,8 @@ plt.close()
 top_labels.to_csv(
     'results/tables/final_dataset_top_diagnoses.csv',
     encoding='utf-8-sig')
-print(
-    f"   Самый частый диагноз: {
-        top_labels.index[0]} ({
-            top_labels.iloc[0]} раз)")
-print(
-    f"   Топ-5: {', '.join([f'{top_labels.index[i]} ({top_labels.iloc[i]})' for i in range(min(5, len(top_labels)))])}")
+print(f"   Самый частый диагноз: {top_labels.index[0]} ({top_labels.iloc[0]} раз)")
+print(f"   Топ-5: {', '.join([f'{top_labels.index[i]} ({top_labels.iloc[i]})' for i in range(min(5, len(top_labels)))])}")
 
 print("\n3. Генерация облака слов")
 all_text = ' '.join(df['text'].fillna('').astype(str))

@@ -53,9 +53,7 @@ df_lemmatized.to_csv(
     'data/processed/diagnozes_lemmatized.csv',
     index=False,
     encoding='utf-8-sig')
-print(
-    f"   Сохранено {
-        len(df_lemmatized)} строк в data/processed/diagnozes_lemmatized.csv")
+print(f"   Сохранено {len(df_lemmatized)} строк в data/processed/diagnozes_lemmatized.csv")
 print(f"   Пример:\n     Было: {df['text'].iloc[0][:80]}...")
 print(f"     Стало: {df_lemmatized['text'].iloc[0][:80]}...")
 

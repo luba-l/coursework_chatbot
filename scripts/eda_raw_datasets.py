@@ -148,8 +148,7 @@ plt.ylabel('Средняя длина текста (символы)')
 plt.title('Сравнение средней длины симптомов в датасетах')
 
 for bar, val in zip(bars, df_comparison['Средняя длина']):
-    plt.text(bar.get_x() + bar.get_width() / 2, bar.get_height() + 5,
-             f'{val:.0f}', ha='center', va='bottom', fontweight='bold')
+    plt.text(bar.get_x() + bar.get_width() / 2, bar.get_height() + 5, f'{val:.0f}', ha='center', va='bottom', fontweight='bold')
 
 plt.tight_layout()
 plt.savefig('results/figures/avg_length_comparison.png', dpi=150)

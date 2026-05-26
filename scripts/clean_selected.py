@@ -65,9 +65,7 @@ df_clean.to_csv(
     'data/processed/diagnozes_clean.csv',
     index=False,
     encoding='utf-8-sig')
-print(
-    f"   Сохранено {
-        len(df_clean)} строк в data/processed/diagnozes_clean.csv")
+print(f"   Сохранено {len(df_clean)} строк в data/processed/diagnozes_clean.csv")
 print(f"   Пример:\n{df_clean.head(2).to_string()}")
 print("  data/processed/symptom2disease_clean.csv")
 print("  data/processed/diagnozes_clean.csv")
