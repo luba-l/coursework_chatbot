@@ -11,6 +11,7 @@ from sklearn.preprocessing import LabelEncoder
 
 nlp = spacy.load("ru_core_news_sm")
 
+
 def clean_text(text):
     """Очистка текста от шума"""
     if not isinstance(text, str):
@@ -20,6 +21,7 @@ def clean_text(text):
     text = re.sub(r'\s+', ' ', text).strip()
     return text
 
+
 def lemmatize_text(text):
     """Лемматизация текста с помощью spaCy"""
     if not isinstance(text, str) or not text:
@@ -27,8 +29,9 @@ def lemmatize_text(text):
     try:
         doc = nlp(text)
         return ' '.join([token.lemma_ for token in doc if not token.is_punct])
-    except:
+    except BaseException:
         return text
+
 
 df = pd.read_csv('data/final/final_dataset.csv')
 vectorizer = TfidfVectorizer(min_df=2, max_df=0.95, ngram_range=(1, 2))

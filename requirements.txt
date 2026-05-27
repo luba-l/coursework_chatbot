@@ -8,3 +8,9 @@ seaborn
 tqdm
 jupyter
 pyTelegramBotAPI
+xgboost
+spacy
+joblib
+vk_api
+python-dotenv
+wordcloud

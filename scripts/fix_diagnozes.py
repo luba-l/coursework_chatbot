@@ -17,7 +17,7 @@ for i, line in enumerate(lines):
 
     last_semicolon = line.rfind(';')
     if last_semicolon == -1:
-        print(f"Строка {i+1} не содержит разделитель")
+        print(f"Строка {i + 1} не содержит разделитель")
         continue
     symptoms = line[:last_semicolon].strip()
     diagnosis = line[last_semicolon + 1:].strip()
@@ -27,9 +27,9 @@ for i, line in enumerate(lines):
     data.append({'text': symptoms, 'label': diagnosis})
 
 df = pd.DataFrame(data)
-print(f"\nОбработано {len(df)} строк")
+print("\nОбработано {len(df)} строк")
 
 df.to_csv('data/raw/diagnozes_fixed.csv', index=False, encoding='utf-8-sig')
-print(f"\n Сохранено: data/raw/diagnozes_fixed.csv")
-print(f"\n Примеры:")
+print("\n Сохранено: data/raw/diagnozes_fixed.csv")
+print("\n Примеры:")
 print(df.head(3).to_string())
